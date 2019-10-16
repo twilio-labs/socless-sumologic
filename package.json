@@ -1,0 +1,19 @@
+{
+  "name": "socless-sumologic",
+  "version": "1.0.0",
+  "description": "Socless Sumologic integration",
+  "main": "index.js",
+  "scripts": {
+    "clean": "find . | grep -E '(__pycache__|.pytest_cache|.egg-info)' | xargs rm -rf",
+    "pretest": "pip3 install tox -q",
+    "test": "tox && npm run clean",
+    "dev": "serverless deploy --stage dev --region us-west-2 --verbose",
+    "prod": "serverless deploy --stage prod --region us-east-1 --verbose"
+  },
+  "author": "Saxon Hunt",
+  "license": "ISC",
+  "dependencies": {
+    "serverless": "1.50.0",
+    "serverless-package-python-functions": "^0.5.0"
+  }
+}

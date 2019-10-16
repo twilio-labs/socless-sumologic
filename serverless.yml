@@ -1,0 +1,87 @@
+service: socless-sumologic
+
+provider:
+  name: aws
+  runtime: python3.7
+  variableSyntax: "\\${{([ ~:a-zA-Z0-9._\\'\",\\-\\/\\(\\)]+?)}}"
+  stage: ${{opt:stage}}
+  region: ${{opt:region}}
+  profile: default
+  versionFunctions: false
+  memorySize: 128
+  timeout: 30
+  environment:
+    SOCLESS_VAULT: ${{cf:${{self:custom.socless}}.SoclessVault}}
+    SOCLESS_RESULTS_TABLE: ${{cf:${{self:custom.socless}}.ExecutionResultsTable}}
+    SOCLESS_EVENTS_TABLE: ${{cf:${{self:custom.socless}}.EventsTable}}
+    SOCLESS_DEDUP_TABLE: ${{cf:${{self:custom.socless}}.DedupTable}}
+    RESULTS_TABLE: ${{cf:${{self:custom.socless}}.ExecutionResultsTable}}
+  vpc:
+    securityGroupIds:
+      - ${{cf:${{self:custom.socless}}.LambdaVpcSG}}
+    subnetIds:
+      - ${{cf:${{self:custom.socless}}.PrivateFunctionSubnet}}
+  role: ${{cf:${{self:custom.socless}}.LambdaExecutionRoleArn}}
+  apiGateway:
+    restApiId: ${{cf:${{self:custom.socless}}.APIGatewayID}}
+    restApiRootResourceId: ${{cf:${{self:custom.socless}}.APIGatewayRootResourceId}}
+
+plugins:
+  - serverless-package-python-functions
+
+package:
+  individually: true
+
+custom:
+  socless: socless-${{self:provider.stage}}
+  pkgPyFuncs:
+    buildDir: build
+    globalRequirements:
+      - functions/requirements.txt
+  endpoints:
+    sumologic: '/sumologic'
+
+functions:
+  SendLogMessage:
+    handler: lambda_function.lambda_handler
+    name: socless_sumologic_send_log_message
+    description: Socless integration to post a message to SumoLogic
+    memorySize: 128
+    timeout: 30
+    package:
+      include:
+        - functions/send_log_message
+
+  SumoEndpointAuthorizer:
+    handler: lambda_function.lambda_handler
+    name: _socless_sumologic_endpoint_authorizer
+    description: Handles authentication and authorization for Sumo ingests
+    environment:
+      SUMO_WEBHOOK_TOKEN: ${{ssm:/socless/sumo/webhook_token~true}}
+      ENDPOINT: ${{self:custom.endpoints.sumologic}}
+    package:
+      include:
+        - functions/endpoint_authorizer
+
+  SumoEndpoint:
+    handler: lambda_function.lambda_handler
+    name: _socless_sumologic_event_endpoint
+    description: Endpoint for ingesting Sumologic data
+    package:
+      include:
+        - functions/event_endpoint
+    events:
+      - http:
+          path: ${{self:custom.endpoints.sumologic}}
+          method: post
+          cors: true
+          authorizer:
+            name: SumoEndpointAuthorizer
+            identitySource: method.request.header.Authorization
+
+resources:
+  - Outputs:
+      SendLogMessage:
+        Description: Socless integration that sends a message to Sumo Logic
+        Value:
+          Fn::Sub: ${SendLogMessageLambdaFunction.Arn}

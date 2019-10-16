@@ -1,0 +1,29 @@
+{
+   "name": "testing",
+   "description": "testing",
+   "playbook": "TestPlaybookName",
+   "event_meta": {},
+   "details": [
+      {
+         "country_name": "test_country",
+         "ip": "8.8.8.8",
+         "username": "shunt"
+      }
+   ],
+   "occured": "2016-10-31T09:05:17Z",
+   "severity": "low",
+   "data_types": {
+      "username": [
+         "user name"
+      ],
+      "country_name": [
+         "string"
+      ],
+      "ip": [
+         "ip",
+         "string"
+      ]
+   },
+   "dedup_keys": [
+   ]
+}

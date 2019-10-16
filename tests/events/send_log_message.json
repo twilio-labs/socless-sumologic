@@ -1,0 +1,10 @@
+{
+   "_testing": true,
+   "State_Config": {
+      "Name": "test",
+      "Parameters": {
+         "sumo_ssm_name" : "/socless/integration_name/message_url",
+         "message" : "TEST"
+      }
+   }
+}
