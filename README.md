@@ -5,7 +5,7 @@ Sumo Logic integrations for the SOCless framework.
 # Deployment Instructions
 
 ## Prerequisites
-
+ 
 - A Sumo Logic account
 - Socless Automation Framework deployed in an AWS Account
 
