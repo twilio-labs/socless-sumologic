@@ -2,15 +2,9 @@
 # pylint: disable=protected-access
 # pylint: disable=wrong-import-position
 # pylint: disable=redefined-outer-name
-import os, json, boto3, pytest
+from tests.conftest import * #imports testing boilerplate
 from requests import exceptions
 from moto import mock_ssm
-
-# boto3.setup_default_session() # use moto instead of boto
-
-import responses # because moto breaks requests
-responses.add_passthru('https://')# moto+requests needs this
-responses.add_passthru('http://')# moto+requests needs this
 
 # begin testing lambda function
 import functions.send_log_message.lambda_function as lambda_function
@@ -26,7 +20,6 @@ def sumo_ssm_name():
 @mock_ssm
 def test_handle_state(sumo_ssm_name, message):
    #setup param for lambda function
-   boto3.setup_default_session()
    client = boto3.client('ssm')
    client.put_parameter(Name=sumo_ssm_name, Type='SecureString', Value='http://twilio.com', KeyId='alias/aws/ssm')
 
@@ -39,7 +32,6 @@ def test_handle_state(sumo_ssm_name, message):
 @mock_ssm
 def test_handle_state_invalid_message(sumo_ssm_name):
    #setup param for lambda function
-   boto3.setup_default_session()
    client = boto3.client('ssm')
    client.put_parameter(Name=sumo_ssm_name, Type='SecureString', Value='http://twilio.com', KeyId='alias/aws/ssm')
 
@@ -56,20 +48,3 @@ def test_handle_state_failed_post(sumo_ssm_name, message):
    # run lambda function
    with pytest.raises(exceptions.ConnectionError):
       response = lambda_function.handle_state(sumo_ssm_name, message)
-
-
-# Method to load test case from external file
-# EVENT_FILE = os.path.join(
-#    os.path.dirname(__file__),
-#    '..',
-#    '..',
-#    'events',
-#    'send_log_message.json'
-# )
-
-# @pytest.fixture()
-# def event(event_file=EVENT_FILE):
-#    '''Trigger event'''
-#    with open(event_file) as f:
-#       return json.load(f)
-
