@@ -3,7 +3,6 @@
 # pylint: disable=wrong-import-position
 # pylint: disable=redefined-outer-name
 from tests.conftest import * #imports testing boilerplate
-from requests import exceptions
 
 # Method to load test case from external file
 EVENT_FILE = os.path.join(
