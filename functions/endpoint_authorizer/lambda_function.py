@@ -1,4 +1,4 @@
-import re, boto3, os
+import re, os
 
 def lambda_handler(event, context):
     authToken =  event.get('authorizationToken',False)
