@@ -61,3 +61,19 @@ Tests use the `moto` library to intercept calls to AWS from boto3 and return a m
 Tests are implemented using the tox library to create a virtual environment, install dependencies from `functions/requirements.txt` plus test dependencies `moto` and `boto3`, set environment variables needed for the tested functions, and to initiate `pytest`.
 
 `tests/events` folder stores event `.json` files that can be imported when writing test cases or used to test lambda functions directly via AWS console.
+
+### Testing deployed lambdas outside of Step Functions
+Whether you are using the AWS Console or invoking the lambda via `boto3` or `aws-cli`, the "Event" that is passed to the lambda needs a certain amount of boilerplate to work correctly:
+
+```json
+{
+  "_testing": true,
+  "State_Config": {
+    "Name": "test",
+    "Parameters": {
+      "<HandleState_arg_name>": "<arg_value>",
+      "<HandleState_arg_name>": "<arg_value>",
+    }
+  }
+}
+```

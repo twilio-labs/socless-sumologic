@@ -1,0 +1,9 @@
+{
+    "args": {
+        "sumo_ssm_name": "<SEND_LOG_MESSAGE_SSM>",
+        "message": "This is a test message."
+    },
+    "expected": {
+        "status": "success"
+    }
+}
