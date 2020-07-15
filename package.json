@@ -14,6 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "serverless": "1.50.0",
-    "serverless-package-python-functions": "^0.5.0"
+    "serverless-package-python-functions": "^0.6.1"
   }
 }
