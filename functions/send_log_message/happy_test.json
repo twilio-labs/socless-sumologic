@@ -1,9 +1,10 @@
 {
-    "args": {
-        "sumo_ssm_name": "<SEND_LOG_MESSAGE_SSM>",
-        "message": "This is a test message."
+    "_testing": true,
+    "State_Config": {
+        "Name": "test",
+        "Parameters": {
+            "<HandleState_arg_name>": "<arg_value>"
+        }
     },
-    "expected": {
-        "status": "success"
-    }
+    "Expected_Result": {}
 }
