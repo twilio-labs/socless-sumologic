@@ -27,19 +27,17 @@ provider:
     restApiRootResourceId: ${{cf:${{self:custom.socless}}.APIGatewayRootResourceId}}
 
 plugins:
-  - serverless-package-python-functions
+  - socless_integration_packager
 
 package:
   individually: true
 
 custom:
   socless: socless-${{self:provider.stage}}
-  pkgPyFuncs:
+  soclessPackager:
     buildDir: build
-    globalRequirements:
-      - functions/requirements.txt
   endpoints:
-    sumologic: '/sumologic'
+    sumologic: "/sumologic"
 
 functions:
   SendLogMessage:
