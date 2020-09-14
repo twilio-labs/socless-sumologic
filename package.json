@@ -4,10 +4,8 @@
   "description": "Socless Sumologic integration",
   "main": "index.js",
   "scripts": {
-    "clean": "find . | grep -E '(__pycache__|.pytest_cache|.egg-info)' | xargs rm -rf",
-    "pretest": "pip3 install tox -q",
-    "test": "tox && npm run clean",
     "dev": "serverless deploy --stage dev --region us-west-2 --verbose",
+    "stage": "serverless deploy --stage stage --region us-east-2 --verbose",
     "prod": "serverless deploy --stage prod --region us-east-1 --verbose"
   },
   "author": "Saxon Hunt",
