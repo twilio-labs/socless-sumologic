@@ -1,6 +1,4 @@
-import simplejson as json, uuid, os
-import boto3
-from boto3.dynamodb.conditions import Key, Attr
+import simplejson as json, os
 from socless import create_events
 from datetime import datetime
 
