@@ -11,7 +11,7 @@
   "author": "Saxon Hunt",
   "license": "ISC",
   "dependencies": {
-    "serverless": "1.80.0",
+    "serverless": "3.0.0",
     "socless_integration_packager": "git+https://github.com/twilio-labs/socless_integration_packager.git#1.0.0"
   }
 }
